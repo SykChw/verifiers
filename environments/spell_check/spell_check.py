@@ -4,7 +4,7 @@ import verifiers as vf
 
 
 def load_environment(
-    dataset_name: str = "spellCheckRL/spellCheckRL",
+    dataset_name: str = "SykChw/obscureSpellCheck",
     dataset_split: str = "train",
     system_prompt: str
     | None = "Check the word character-by-character and suggest the closest correct spelling. Put your answer in <correct> tags.",
