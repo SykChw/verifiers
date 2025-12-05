@@ -3,6 +3,7 @@ import asyncio
 import importlib.resources
 import json
 import logging
+import os
 from typing import Any, Dict
 
 try:
@@ -184,9 +185,9 @@ def main():
     parser.add_argument(
         "--state-columns",
         "-C",
-        nargs="+",
+        type=lambda t: [s.strip() for s in t.split(",")],
         default=[],
-        help="List of state columns to save",
+        help="Comma-separated list of state columns to save (e.g., 'turn,timing')",
     )
     parser.add_argument(
         "--save-results",
@@ -219,7 +220,7 @@ def main():
     )
     args = parser.parse_args()
 
-    setup_logging("DEBUG" if args.verbose else "INFO")
+    setup_logging("DEBUG" if args.verbose else os.getenv("VF_LOG_LEVEL", "INFO"))
 
     # apply defaults: CLI args take precedence, then env defaults, then global defaults
     env_defaults = get_env_eval_defaults(args.env_id)
@@ -304,7 +305,6 @@ def main():
         max_concurrent=args.max_concurrent,
         max_concurrent_generation=args.max_concurrent_generation,
         max_concurrent_scoring=args.max_concurrent_scoring,
-        interleave_scoring=not args.no_interleave_scoring,
         # logging
         print_results=True,
         verbose=args.verbose,
